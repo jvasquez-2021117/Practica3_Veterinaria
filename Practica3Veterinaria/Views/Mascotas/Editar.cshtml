@@ -1,0 +1,14 @@
+@model FormMascotaViewModel
+@{
+    ViewData["Title"] = "Editar mascota";
+}
+<div class="back-line"><a asp-action="Detalles" asp-route-id="@Model.Codigo">← Volver al paciente</a></div>
+<div class="page-head compact-head"><div><span class="eyebrow">ACTUALIZAR PACIENTE</span><h1>Editar a @Model.Nombre</h1><p>Código asignado: <code class="code-label">@Model.Codigo</code>. La especie y el estado del paciente se conservan al guardar.</p></div></div>
+<div class="form-panel">
+    <form asp-action="Editar" asp-route-id="@Model.Codigo" method="post" asp-antiforgery="true">
+        <input type="hidden" asp-for="Codigo" />
+        <partial name="_FormularioMascota" model="Model" />
+        <div class="form-actions"><a class="btn btn-ghost" asp-action="Detalles" asp-route-id="@Model.Codigo">Cancelar</a><button type="submit" class="btn btn-primary">✓ Guardar cambios</button></div>
+    </form>
+</div>
+@section Scripts { <script asp-append-version="true" src="~/js/formulario.js"></script> }

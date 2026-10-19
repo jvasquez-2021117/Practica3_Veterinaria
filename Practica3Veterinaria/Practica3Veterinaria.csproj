@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Practica3Veterinaria</RootNamespace>
+    <AssemblyName>Practica3Veterinaria</AssemblyName>
+  </PropertyGroup>
+  <!-- El mini-proyecto de pruebas no debe compilarse dentro del sitio web. -->
+  <ItemGroup>
+    <Compile Remove="Pruebas/**/*.cs" />
+    <Content Remove="Pruebas/**" />
+    <None Remove="Pruebas/**" />
+  </ItemGroup>
+</Project>

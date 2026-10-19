@@ -1,0 +1,77 @@
+@model IndexMascotasViewModel
+@{
+    ViewData["Title"] = "Panel de mascotas";
+}
+<div class="page-head">
+    <div>
+        <span class="eyebrow">CENTRO DE CONTROL</span>
+        <h1>Pacientes de la veterinaria <span class="paw">✦</span></h1>
+        <p>Administra los datos, el estado y la dosificación de tus pacientes desde un solo lugar.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Crear"><span aria-hidden="true">＋</span> Nueva mascota</a>
+</div>
+<div class="stats">
+    <div class="stat-card"><span class="stat-icon teal">◈</span><span class="stat-label">Pacientes registrados</span><strong>@Model.Total</strong><small>En el sistema</small></div>
+    <div class="stat-card"><span class="stat-icon green">♥</span><span class="stat-label">Pacientes sanos</span><strong>@Model.Sanas</strong><small>Estado estable</small></div>
+    <div class="stat-card"><span class="stat-icon amber">✚</span><span class="stat-label">Pacientes enfermos</span><strong>@Model.Enfermas</strong><small>Requieren atención</small></div>
+    <div class="stat-card"><span class="stat-icon blue">❖</span><span class="stat-label">Especies registradas</span><strong>@((Model.Perros > 0 ? 1 : 0) + (Model.Gatos > 0 ? 1 : 0) + (Model.Aves > 0 ? 1 : 0) + (Model.Tortugas > 0 ? 1 : 0)) / 4</strong><small>Perro · Gato · Ave · Tortuga</small></div>
+</div>
+<section class="panel">
+    <div class="panel-heading">
+        <div><h2>Listado de pacientes</h2><p>@Model.Mascotas.Cantidad resultado(s) en la tabla</p></div>
+        <form method="get" asp-action="Index" class="search-form">
+            <label for="buscar" class="sr-only">Buscar mascota</label>
+            <input id="buscar" type="search" name="buscar" value="@Model.Busqueda" placeholder="Buscar nombre, código o propietario" maxlength="80" />
+            <button class="btn btn-secondary" type="submit">Buscar</button>
+            @if (!string.IsNullOrWhiteSpace(Model.Busqueda))
+            {
+                <a class="btn btn-ghost" asp-action="Index">Limpiar</a>
+            }
+        </form>
+    </div>
+    @if (Model.Mascotas.Cantidad == 0)
+    {
+        <div class="empty-state">
+            <span class="empty-illustration">🐾</span>
+            @if (string.IsNullOrWhiteSpace(Model.Busqueda))
+            {
+                <h3>Aún no hay mascotas registradas</h3>
+                <p>Empieza registrando un perro, gato, ave o tortuga para utilizar el sistema.</p>
+                <a class="btn btn-primary" asp-action="Crear">Registrar mi primera mascota</a>
+            }
+            else
+            {
+                <h3>No se encontraron pacientes</h3>
+                <p>Intenta otra búsqueda o vuelve al listado completo.</p>
+                <a class="btn btn-secondary" asp-action="Index">Mostrar todos</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Paciente</th><th>Código</th><th>Propietario</th><th>Peso</th><th>Estado</th><th class="actions-th">Acciones</th></tr></thead>
+                <tbody>
+                    @foreach (var mascota in Model.Mascotas)
+                    {
+                        var emoji = mascota switch { Perro => "🐶", Gato => "🐱", Ave => "🐦", Tortuga => "🐢", _ => "🐾" };
+                        <tr>
+                            <td><div class="pet-info"><span class="pet-avatar">@emoji</span><span><strong>@mascota.Nombre</strong><small>@mascota.Especie · @mascota.Edad año(s)</small></span></div></td>
+                            <td><code class="code-label">@mascota.Codigo</code></td>
+                            <td>@mascota.Propietario</td>
+                            <td>@mascota.Peso.ToString("0.##") kg</td>
+                            <td><span class="status @(mascota.EstaEnferma ? "status-sick" : "status-healthy")"><span>●</span> @mascota.EstadoTexto</span></td>
+                            <td><div class="row-actions">
+                                <a class="action-link" asp-action="Detalles" asp-route-id="@mascota.Codigo" title="Consultar">Ver</a>
+                                <a class="action-link" asp-action="Editar" asp-route-id="@mascota.Codigo" title="Editar">Editar</a>
+                                <a class="action-link danger-link" asp-action="Eliminar" asp-route-id="@mascota.Codigo" title="Eliminar">Eliminar</a>
+                            </div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+<p class="footnote">Los pacientes permanecen registrados mientras el servidor está encendido. Al detener la aplicación, se borra la información (requisito sin persistencia).</p>

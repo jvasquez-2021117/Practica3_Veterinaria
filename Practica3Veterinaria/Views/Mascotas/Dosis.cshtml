@@ -1,0 +1,37 @@
+@model DosisViewModel
+@{
+    ViewData["Title"] = "Calcular dosis";
+}
+<div class="back-line"><a asp-action="Detalles" asp-route-id="@Model.Codigo">← Volver al paciente</a></div>
+<div class="page-head compact-head"><div><span class="eyebrow">HERRAMIENTA DE CÁLCULO</span><h1>Calculadora de dosis</h1><p>Introduce la dosis base por kilogramo; el sistema ajustará el resultado según la especie.</p></div></div>
+<div class="dose-grid">
+    <section class="panel dose-form">
+        <h2>Datos del medicamento</h2>
+        <div class="patient-summary"><span class="patient-summary-icon">💊</span><div><strong>@Model.Nombre</strong><span>@Model.Especie · @Model.Peso.ToString("0.##") kg</span></div></div>
+        <form asp-action="Dosis" method="post" asp-antiforgery="true">
+            <input asp-for="Codigo" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+            <div class="field"><label asp-for="DosisPorKg">Dosis base (mg/kg)</label>
+                <input asp-for="DosisPorKg" type="number" min="0.000001" max="1000000" step="any" required placeholder="Ejemplo: 10" />
+                <span class="error" asp-validation-for="DosisPorKg"></span>
+                <span class="hint">Ingresa la cantidad indicada en el ejercicio (no una dosis médica real).</span></div>
+            <button type="submit" class="btn btn-primary full-width">Calcular dosis</button>
+        </form>
+    </section>
+    <section class="panel dose-result">
+        <h2>Resultado del cálculo</h2>
+        <span class="dose-illustration">⚗</span>
+        @if (Model.ResultadoMg.HasValue)
+        {
+            <span class="result-caption">Dosis calculada para @Model.Nombre</span>
+            <strong class="result-number">@Model.ResultadoMg.Value.ToString("0.####") <small>mg</small></strong>
+            <div class="formula"><strong>Fórmula aplicada</strong><span>@Model.Peso.ToString("0.##") kg × @Model.DosisPorKg.ToString("0.######") mg/kg × @Model.Factor.ToString("0.##")</span></div>
+        }
+        else
+        {
+            <h3>Listo para calcular</h3><p>Ingresa la dosis base y presiona “Calcular dosis” para ver el resultado.</p>
+            <div class="formula"><strong>Fórmula</strong><span>Peso × dosis por kg × factor (@(Model.Factor * 100)%)</span></div>
+        }
+        <p class="disclaimer">Herramienta académica. Los factores son ficticios y no deben utilizarse para medicar animales.</p>
+    </section>
+</div>

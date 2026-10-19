@@ -1,0 +1,13 @@
+@model FormMascotaViewModel
+@{
+    ViewData["Title"] = "Registrar mascota";
+}
+<div class="back-line"><a asp-action="Index">← Volver al listado</a></div>
+<div class="page-head compact-head"><div><span class="eyebrow">NUEVO PACIENTE</span><h1>Registrar mascota</h1><p>Completa el formulario para crear la ficha del paciente.</p></div></div>
+<div class="form-panel">
+    <form asp-action="Crear" method="post" asp-antiforgery="true">
+        <partial name="_FormularioMascota" model="Model" />
+        <div class="form-actions"><a class="btn btn-ghost" asp-action="Index">Cancelar</a><button type="submit" class="btn btn-primary">＋ Guardar paciente</button></div>
+    </form>
+</div>
+@section Scripts { <script asp-append-version="true" src="~/js/formulario.js"></script> }

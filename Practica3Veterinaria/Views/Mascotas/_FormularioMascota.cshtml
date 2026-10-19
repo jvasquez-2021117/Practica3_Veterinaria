@@ -1,0 +1,83 @@
+@model FormMascotaViewModel
+<div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+<section class="form-section">
+    <div class="section-title"><span class="section-number">01</span><div><h2>Información general</h2><p>Datos principales del paciente.</p></div></div>
+    <div class="form-grid">
+        <div class="field"><label asp-for="Tipo">Especie <span class="required">*</span></label>
+            @if (!string.IsNullOrEmpty(Model.Codigo))
+            {
+                <input asp-for="Tipo" id="tipo-mascota" type="hidden" />
+                <div class="readonly-field">@Model.Tipo.ToString() — @(Model.Tipo switch { 1 => "Perro", 2 => "Gato", 3 => "Ave", 4 => "Tortuga", _ => "Desconocida" })</div>
+                <span class="hint">Para conservar las clases originales, no se cambia la especie al editar.</span>
+            }
+            else
+            {
+                <select asp-for="Tipo" id="tipo-mascota" required>
+                    <option value="0">Selecciona una especie...</option>
+                    <option value="1">🐶 Perro</option><option value="2">🐱 Gato</option>
+                    <option value="3">🐦 Ave</option><option value="4">🐢 Tortuga</option>
+                </select>
+            }
+            <span class="error" asp-validation-for="Tipo"></span></div>
+        <div class="field"><label asp-for="Nombre">Nombre <span class="required">*</span></label>
+            <input asp-for="Nombre" maxlength="80" placeholder="Ejemplo: Luna" required />
+            <span class="error" asp-validation-for="Nombre"></span></div>
+        <div class="field"><label asp-for="Peso">Peso (kg) <span class="required">*</span></label>
+            <input asp-for="Peso" type="number" step="any" min="0.01" max="5000" required />
+            <span class="hint">Utiliza decimales con punto, por ejemplo 4.5</span>
+            <span class="error" asp-validation-for="Peso"></span></div>
+        <div class="field"><label asp-for="Sexo">Sexo <span class="required">*</span></label>
+            <select asp-for="Sexo" required><option value="">Selecciona una opción...</option>
+                <option value="Macho">Macho</option><option value="Hembra">Hembra</option></select>
+            <span class="error" asp-validation-for="Sexo"></span></div>
+        <div class="field"><label asp-for="Edad">Edad (años) <span class="required">*</span></label>
+            <input asp-for="Edad" type="number" min="0" max="250" required />
+            <span class="error" asp-validation-for="Edad"></span></div>
+        <div class="field"><label asp-for="Propietario">Propietario <span class="required">*</span></label>
+            <input asp-for="Propietario" maxlength="80" placeholder="Nombre del responsable" required />
+            <span class="error" asp-validation-for="Propietario"></span></div>
+        <div class="field"><label asp-for="Estado">Estado del paciente</label>
+            @if (string.IsNullOrEmpty(Model.Codigo))
+            {
+                <select asp-for="Estado"><option value="Sano">Sano</option><option value="Enfermo">Enfermo</option></select>
+            }
+            else
+            {
+                <input asp-for="Estado" type="hidden" />
+                <div class="readonly-field">@Model.Estado</div>
+                <span class="hint">Cambia el estado desde el botón en los detalles del paciente.</span>
+            }
+            <span class="error" asp-validation-for="Estado"></span></div>
+    </div>
+</section>
+<section class="form-section">
+    <div class="section-title"><span class="section-number">02</span><div><h2>Características de la especie</h2><p>Los campos cambian según el tipo de mascota.</p></div></div>
+    <div class="species-hint" id="species-prompt">Selecciona primero una especie para ver sus características.</div>
+    <div class="especie-extra form-grid" data-tipo="1" hidden>
+        <div class="field"><label for="RazaPerro">Raza <span class="required">*</span></label>
+            <input id="RazaPerro" name="Raza" data-campo-especie type="text" maxlength="60" value="@(Model.Tipo == 1 ? Model.Raza : "")" placeholder="Ejemplo: Labrador" />
+            @if (Model.Tipo == 1) { <span class="error" asp-validation-for="Raza"></span> }</div>
+        <div class="field"><label for="Tamano">Tamaño <span class="required">*</span></label>
+            <select asp-for="Tamano" data-campo-especie><option value="">Selecciona tamaño...</option>
+                <option value="Pequeño">Pequeño</option><option value="Mediano">Mediano</option><option value="Grande">Grande</option></select>
+            <span class="error" asp-validation-for="Tamano"></span></div>
+    </div>
+    <div class="especie-extra form-grid" data-tipo="2" hidden>
+        <div class="field"><label for="RazaGato">Raza <span class="required">*</span></label>
+            <input id="RazaGato" name="Raza" data-campo-especie type="text" maxlength="60" value="@(Model.Tipo == 2 ? Model.Raza : "")" placeholder="Ejemplo: Siamés" />
+            @if (Model.Tipo == 2) { <span class="error" asp-validation-for="Raza"></span> }</div>
+        <div class="field field-toggle"><label class="checkbox-label"><input asp-for="Esterilizado" data-campo-especie /> ¿Está esterilizado?</label><span class="hint">Marca si corresponde</span></div>
+    </div>
+    <div class="especie-extra form-grid" data-tipo="3" hidden>
+        <div class="field"><label asp-for="EnvergaduraAlasCm">Envergadura de alas (cm) <span class="required">*</span></label>
+            <input asp-for="EnvergaduraAlasCm" data-campo-especie type="number" step="any" min="0.01" max="10000" placeholder="Ejemplo: 45" />
+            <span class="error" asp-validation-for="EnvergaduraAlasCm"></span></div>
+        <div class="field field-toggle"><label class="checkbox-label"><input asp-for="PuedeVolar" data-campo-especie /> ¿Puede volar?</label><span class="hint">Marca si corresponde</span></div>
+    </div>
+    <div class="especie-extra form-grid" data-tipo="4" hidden>
+        <div class="field"><label asp-for="TipoCaparazon">Tipo de caparazón <span class="required">*</span></label>
+            <input asp-for="TipoCaparazon" data-campo-especie maxlength="60" placeholder="Ejemplo: Duro" />
+            <span class="error" asp-validation-for="TipoCaparazon"></span></div>
+        <div class="field field-toggle"><label class="checkbox-label"><input asp-for="EsAcuatica" data-campo-especie /> ¿Es acuática?</label><span class="hint">Marca si corresponde</span></div>
+    </div>
+</section>

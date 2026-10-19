@@ -1,0 +1,16 @@
+@model Mascota
+@{
+    ViewData["Title"] = "Eliminar mascota";
+}
+<div class="back-line"><a asp-action="Detalles" asp-route-id="@Model.Codigo">← Cancelar y volver</a></div>
+<div class="confirmation-container"><section class="panel danger-panel">
+    <div class="warning-symbol">!</div>
+    <span class="eyebrow">CONFIRMACIÓN REQUERIDA</span>
+    <h1>¿Eliminar a @Model.Nombre?</h1>
+    <p>Vas a eliminar permanentemente el registro <code class="code-label">@Model.Codigo</code> de esta sesión. Esta operación no se puede deshacer.</p>
+    <div class="confirm-detail"><strong>@Model.Nombre</strong><span>@Model.Especie · @Model.Propietario</span></div>
+    <form asp-action="Eliminar" asp-route-id="@Model.Codigo" method="post" asp-antiforgery="true" class="confirm-actions">
+        <a class="btn btn-secondary" asp-action="Detalles" asp-route-id="@Model.Codigo">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Sí, eliminar paciente</button>
+    </form>
+</section></div>

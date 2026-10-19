@@ -1,0 +1,56 @@
+@model Mascota
+@{
+    ViewData["Title"] = "Detalles del paciente";
+    string icono = Model switch { Perro => "🐶", Gato => "🐱", Ave => "🐦", Tortuga => "🐢", _ => "🐾" };
+}
+<div class="back-line"><a asp-action="Index">← Volver al listado</a></div>
+<div class="detail-heading">
+    <div class="detail-icon">@icono</div>
+    <div class="detail-intro"><span class="eyebrow">HISTORIAL DE PACIENTE</span><h1>@Model.Nombre</h1><p>@Model.Especie · <code class="code-label">@Model.Codigo</code></p></div>
+    <span class="status large-status @(Model.EstaEnferma ? "status-sick" : "status-healthy")">● @Model.EstadoTexto</span>
+</div>
+<div class="details-grid">
+    <section class="panel details-panel">
+        <h2>Información del paciente</h2>
+        <div class="detail-list">
+            <div><span>Nombre</span><strong>@Model.Nombre</strong></div>
+            <div><span>Código único</span><strong>@Model.Codigo</strong></div>
+            <div><span>Especie</span><strong>@Model.Especie</strong></div>
+            <div><span>Peso</span><strong>@Model.Peso.ToString("0.##") kg</strong></div>
+            <div><span>Sexo</span><strong>@Model.Sexo</strong></div>
+            <div><span>Edad</span><strong>@Model.Edad año(s)</strong></div>
+            <div><span>Propietario</span><strong>@Model.Propietario</strong></div>
+            <div><span>Estado</span><strong>@Model.EstadoTexto</strong></div>
+            @if (Model is Perro perro)
+            {
+                <div><span>Raza</span><strong>@perro.Raza</strong></div><div><span>Tamaño</span><strong>@perro.Tamano</strong></div>
+            }
+            else if (Model is Gato gato)
+            {
+                <div><span>Raza</span><strong>@gato.Raza</strong></div><div><span>Esterilizado</span><strong>@(gato.Esterilizado ? "Sí" : "No")</strong></div>
+            }
+            else if (Model is Ave ave)
+            {
+                <div><span>Envergadura de alas</span><strong>@ave.EnvergaduraAlasCm.ToString("0.##") cm</strong></div><div><span>Puede volar</span><strong>@(ave.PuedeVolar ? "Sí" : "No")</strong></div>
+            }
+            else if (Model is Tortuga tortuga)
+            {
+                <div><span>Tipo de caparazón</span><strong>@tortuga.TipoCaparazon</strong></div><div><span>Es acuática</span><strong>@(tortuga.EsAcuatica ? "Sí" : "No")</strong></div>
+            }
+        </div>
+    </section>
+    <div class="right-detail">
+        <section class="panel details-panel">
+            <h2>Acciones rápidas</h2>
+            <div class="action-stack">
+                <a class="btn btn-primary full-width" asp-action="Dosis" asp-route-id="@Model.Codigo">✚ Calcular dosis</a>
+                <a class="btn btn-secondary full-width" asp-action="Editar" asp-route-id="@Model.Codigo">✎ Editar información</a>
+                <form asp-action="CambiarEstado" asp-route-id="@Model.Codigo" method="post" asp-antiforgery="true">
+                    <button class="btn btn-secondary full-width" type="submit">↻ Cambiar a @(Model.EstaEnferma ? "sana" : "enferma")</button>
+                </form>
+                <a class="btn btn-danger-outline full-width" asp-action="Eliminar" asp-route-id="@Model.Codigo">Eliminar paciente</a>
+            </div>
+        </section>
+        <section class="helper-card"><span class="helper-icon">💊</span><h3>Dosificación específica</h3><p>La dosis de @Model.Especie.ToLowerInvariant() aplica el <strong>@(Model.FactorDosis * 100)%</strong> de la dosis base (peso × mg/kg).</p><a asp-action="Dosis" asp-route-id="@Model.Codigo">Ir a calculadora →</a></section>
+    </div>
+</div>

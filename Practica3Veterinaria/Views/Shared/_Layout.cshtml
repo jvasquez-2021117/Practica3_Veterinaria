@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Sistema veterinario de gestión de mascotas con ASP.NET Core MVC." />
+    <title>@ViewData["Title"] · VetCare</title>
+    <link rel="stylesheet" asp-append-version="true" href="~/css/site.css" />
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar" aria-label="Navegación principal">
+            <a class="brand" asp-controller="Mascotas" asp-action="Index" aria-label="Ir al inicio">
+                <span class="brand-icon">✚</span>
+                <span><strong>VetCare</strong><small>Sistema veterinario</small></span>
+            </a>
+            <div class="nav-heading">MENÚ PRINCIPAL</div>
+            <nav class="navigation">
+                <a class="nav-link" asp-controller="Mascotas" asp-action="Index"><span>▦</span> Panel de mascotas</a>
+                <a class="nav-link" asp-controller="Mascotas" asp-action="Crear"><span>✚</span> Registrar paciente</a>
+            </nav>
+        </aside>
+        <div class="workspace">
+            <header class="topbar">
+                <a class="mobile-brand" asp-controller="Mascotas" asp-action="Index">✚ VetCare</a>
+                <span class="topbar-caption">GESTIÓN DE PACIENTES</span>
+                <span class="topbar-chip">● Sistema activo</span>
+            </header>
+            <main class="content">
+                @if (TempData["Exito"] is string mensaje)
+                {
+                    <div class="alert-success" role="status"><span>✓</span> @mensaje</div>
+                }
+                @RenderBody()
+            </main>
+            <footer class="footer">VetCare · Práctica 3 · Sistema educativo sin base de datos</footer>
+        </div>
+    </div>
+    <script asp-append-version="true" src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

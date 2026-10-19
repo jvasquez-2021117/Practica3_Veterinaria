@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12217.157 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practica3Veterinaria", "Practica3Veterinaria.csproj", "{CFA6F1C3-6DF1-4C56-9D95-31399B9E3F1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFA6F1C3-6DF1-4C56-9D95-31399B9E3F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA6F1C3-6DF1-4C56-9D95-31399B9E3F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA6F1C3-6DF1-4C56-9D95-31399B9E3F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA6F1C3-6DF1-4C56-9D95-31399B9E3F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
